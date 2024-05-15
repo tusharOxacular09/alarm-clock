@@ -9,14 +9,6 @@ This is a simple alarm clock web application built using HTML, CSS, and vanilla 
 - Triggers an alarm sound when the current time matches the set alarm time.
 - Provides the option to clear the set alarm.
 
-## Screenshots
-
-[Include screenshots or GIFs of your application in action if available]
-
-## Demo
-
-[Provide a link to a live demo of your application if available]
-
 ## Usage
 
 To use the alarm clock:
