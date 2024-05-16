@@ -3,12 +3,40 @@ const currentTime = document.querySelector("h1"), // Element to display current 
   content = document.querySelector(".content"), // Container for select dropdowns
   selectMenu = document.querySelectorAll("select"), // Select dropdowns for hour, minute, and AM/PM
   setAlarmBtn = document.querySelector("button"), // Button to set/clear alarm
-  body = document.querySelector("body"); // Body element
+  body = document.querySelector("body"), // Body element
+  ararmListEl = document.getElementById("alarm-lsit-id"); // Alarm list element
 
 // Initializing variables
 let alarmTime, // Variable to store alarm time
   isAlarmSet, // Variable to track if alarm is set or cleared
   ringtone = new Audio("./assets/music/ringtone.mp3"); // Audio element for the alarm ringtone
+
+let allAlarmList = []; // Array to store all set alarms
+
+// Function to add alarms to the list
+function addAlarmToList(time) {
+  const alarmItem = document.createElement("div"); // Create a div for the alarm item
+  alarmItem.classList.add("alarm-item"); // Add a class to the alarm item
+  alarmItem.innerHTML = `
+    <div class="setted-alarm-item">
+      <span>${time}</span>
+      <button class="delete-btn">Delete</button>
+    <div>
+  `;
+  ararmListEl.appendChild(alarmItem); // Append the alarm item to the alarm list
+
+  // Event listener for the delete button
+  const deleteBtn = alarmItem.querySelector(".delete-btn");
+  deleteBtn.addEventListener("click", () => {
+    // Remove the alarm from the list
+    ararmListEl.removeChild(alarmItem);
+    // Remove the alarm from the array of alarms
+    const index = allAlarmList.indexOf(time);
+    if (index !== -1) {
+      allAlarmList.splice(index, 1);
+    }
+  });
+}
 
 // Populating hour dropdown with options
 for (let i = 12; i > 0; i--) {
@@ -48,30 +76,29 @@ setInterval(() => {
   s = s < 10 ? "0" + s : s;
   currentTime.innerText = `${h}:${m}:${s} ${ampm}`;
 
-  // Checking if current time matches alarm time
-  if (alarmTime === `${h}:${m} ${ampm}`) {
-    // Playing alarm ringtone
-    ringtone.play();
-    // Looping alarm ringtone
-    ringtone.loop = true;
-    // Changing background color
-    body.style.backgroundColor = "red";
-    setAlarmBtn.style.backgroundColor = "red";
-  }
-});
+  // Checking if any alarms are triggered
+  checkAlarms();
+}, 1000);
 
 // Function to set/clear alarm
 function setAlarm() {
-  // Clearing alarm if already set
-  if (isAlarmSet) {
-    alarmTime = "";
+  // Making it a Pause Button when alarm encountered
+  if (
+    getComputedStyle(setAlarmBtn).backgroundColor === "rgb(255, 0, 0)" &&
+    setAlarmBtn.textContent === "Pause"
+  ) {
+    // Stop the alarm
     ringtone.pause();
-    content.classList.remove("disable");
-    setAlarmBtn.innerText = "Set Alarm";
-    // Resetting background color
-    body.style.backgroundColor = "#49eb49";
-    setAlarmBtn.style.backgroundColor = "#49eb49";
-    return (isAlarmSet = false);
+    // Remove the alarm from the array of alarms
+    const index = allAlarmList.indexOf(alarmTime);
+    if (index !== -1) {
+      allAlarmList.splice(index, 1);
+    }
+    // Changing background color
+    body.style.backgroundColor = "#3de63d";
+    setAlarmBtn.style.backgroundColor = "#3de63d";
+    setAlarmBtn.textContent = "Set Alarm";
+    return;
   }
 
   // Getting selected time for alarm
@@ -85,11 +112,39 @@ function setAlarm() {
     // Alerting user to select valid time
     return alert("Please, select a valid time to set Alarm!");
   }
-  // Setting alarm time
-  alarmTime = time;
-  isAlarmSet = true;
-  content.classList.add("disable");
-  setAlarmBtn.innerText = "Clear Alarm";
+  // Adding the alarm time to the array of alarms
+  allAlarmList.push(time);
+  // Adding the alarm to the list
+  addAlarmToList(time);
+}
+
+// Function to check if any alarms are triggered
+function checkAlarms() {
+  const date = new Date(),
+    h = date.getHours(),
+    m = date.getMinutes(),
+    ampm = h >= 12 ? "PM" : "AM";
+  const currentTime = `${h < 10 ? "0" + h : h}:${m < 10 ? "0" + m : m} ${ampm}`;
+
+  if (allAlarmList.includes(currentTime.trim())) {
+    // Playing alarm ringtone
+    ringtone.play();
+    // Looping alarm ringtone
+    ringtone.loop = true;
+    // Changing background color
+    body.style.backgroundColor = "red";
+    setAlarmBtn.style.backgroundColor = "red";
+    setAlarmBtn.textContent = "Pause";
+    // Removing the triggered alarm from the list
+    const index = allAlarmList.indexOf(currentTime);
+    if (index !== -1) {
+      allAlarmList.splice(index, 1);
+      const alarmItem = document.querySelector(
+        `.alarm-item span:contains('${currentTime}')`
+      ).parentElement;
+      ararmListEl.removeChild(alarmItem);
+    }
+  }
 }
 
 // Adding click event listener to set/clear alarm button

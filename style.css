@@ -28,7 +28,7 @@ body {
 /* Styling for the wrapper */
 .wrapper {
   width: 440px;
-  padding: 30px 30px 38px;
+  padding: 26px;
   background: #fff; /* Set background color */
   border-radius: 10px;
   flex-direction: column; /* Arrange children in a column */
@@ -37,14 +37,14 @@ body {
 
 /* Styling for the alarm clock image */
 .wrapper img {
-  max-width: 103px; /* Limit maximum width */
+  max-width: 90px; /* Limit maximum width */
 }
 
 /* Styling for the clock display */
 .wrapper h1 {
-  font-size: 38px;
+  font-size: 36px;
   font-weight: 500;
-  margin: 30px 0;
+  margin: 15px 0;
 }
 
 /* Styling for the content (hour, minute, and AM/PM selection) */
@@ -60,7 +60,7 @@ body {
 
 /* Styling for each column (hour, minute, and AM/PM) */
 .content .column {
-  padding: 0 10px;
+  padding: 0 8px;
   border-radius: 5px;
   border: 1px solid #bfbfbf; /* Add border */
   width: calc(100% / 3 - 5px); /* Calculate width for equal distribution */
@@ -90,8 +90,42 @@ body {
   color: #fff;
   cursor: pointer;
   font-size: 20px;
-  padding: 17px 0;
-  margin-top: 20px;
+  padding: 12px 0;
+  margin-top: 15px;
   border-radius: 5px;
   background: #3de63d; /* Set background color */
 }
+
+/* Alarm List */
+.alarm-list {
+  margin-top: 15px;
+  width: 100%;
+}
+.alarm-list p {
+  font-size: 18px;
+  text-align: start;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.setted-alarm-item {
+  display: flex;
+  width: 260px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2px;
+  margin-top: 5px;
+}
+
+.setted-alarm-item button {
+  width: auto;
+  border: none;
+  outline: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px 6px;
+  margin-top: 0px;
+  border-radius: 4px;
+  background: red; /* Set background color */
+}
+/* Alarm List Ends */
